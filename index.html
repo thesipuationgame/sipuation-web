@@ -248,6 +248,53 @@
   </div>
 </div>
 
+
+<!-- Floating Deck Selector -->
+<div style="position: fixed; top: 10px; right: 10px; z-index: 1001;">
+  <select id="deckSelect" onchange="switchDeck()" style="padding: 10px; font-size: 1em; border-radius: 10px; background-color: hotpink; color: white; border: none;">
+    <option value="BASE">🎴 Base Deck</option>
+    <option value="COUPLES">💏 Couples Edition</option>
+  </select>
+</div>
+
+<script>
+  const baseDeck = {
+    SIP: ["Sip if you've ever said 'I'm on my way' while still in bed.", "Sip if you ever ghosted someone and acted like they were the problem."],
+    SIN: ["Send a flirty message to someone you shouldn't.", "Let someone read your last DM out loud."],
+    CONFESS: ["What is the biggest secret you are still hiding?", "Who is one person you lowkey do not trust?"],
+    WILD: ["Everyone vote: who is the most chaotic? That person leads the next round.", "Pick someone to swap phones with for 60 seconds."]
+  };
+
+  const couplesDeck = {
+    COUPLES: ["Kiss your partner like it\u2019s the first time\u2014or sip.", "What\u2019s a fantasy you haven\u2019t told them yet?", "Let your partner scroll through your camera roll for 10 seconds.", "If you had to pick one of your exes to come back, who would it be?", "Trade phones for 3 minutes. Sip if you flinch.", "Whisper something spicy in your partner's ear.", "Rate your partner's performance out of 10\u2014be honest.", "If your partner were a song, what would their title be?", "Show the last message you were scared to send.", "Play your partner's favorite song and slow dance\u2014now.", "Let your partner read your most recent note or draft text.", "Switch outfits (or accessories) with your partner for one round.", "Take a couples selfie\u2014but make it messy.", "Who catches feelings faster? Sip if it\u2019s you.", "What\u2019s one thing you still don\u2019t understand about your partner?", "Let your partner pick a random app and open it.", "Confess something small you\u2019ve kept from them.", "Do an impression of each other.", "Give a compliment you\u2019ve never said out loud.", "Take a shot if you\u2019ve ever stalked your partner\u2019s ex.", "Tell them one thing you want more of in this relationship.", "Say the pettiest thing you've done mid-argument.", "Draw a heart on your partner somewhere... with lipstick.", "Take turns finishing this: 'I love it when you\u2026'", "Kiss your partner's hand or foot like royalty\u2014or sip."]
+  };
+
+  let currentDeck = "BASE";
+  let cards = baseDeck;
+
+  function switchDeck() {
+    const selected = document.getElementById('deckSelect').value;
+    const categorySelect = document.getElementById('category');
+    categorySelect.innerHTML = ""; // clear options
+
+    if (selected === "BASE") {
+      cards = baseDeck;
+      for (let key in baseDeck) {
+        let opt = document.createElement("option");
+        opt.value = key;
+        opt.textContent = key;
+        categorySelect.appendChild(opt);
+      }
+    } else if (selected === "COUPLES") {
+      cards = couplesDeck;
+      let opt = document.createElement("option");
+      opt.value = "COUPLES";
+      opt.textContent = "COUPLES";
+      categorySelect.appendChild(opt);
+    }
+  }
+</script>
+
 </body>
 
 
