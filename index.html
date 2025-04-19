@@ -226,6 +226,29 @@
     100% { transform: translateY(0px); }
   }
 </style>
+
+<!-- Rules Button -->
+<button onclick="document.getElementById('rulesModal').style.display='block'" style="position: fixed; bottom: 60px; right: 15px; background: rgba(255,105,180,0.9); color: white; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; border: none; z-index: 999;">?</button>
+
+<!-- Rules Modal -->
+<div id="rulesModal" style="display:none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.85); color: white; z-index: 1000; padding: 40px 20px; text-align: left; overflow-y: auto;">
+  <div style='background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; max-width: 600px; margin: auto;'>
+    <h2 style='color: hotpink; text-align: center;'>🎲 How to Play</h2>
+    <ul style='line-height: 1.6em; font-size: 1.1em; list-style: none; padding-left: 0;'>
+      <li>1. Pick your category: <strong>SIP, SIN, CONFESS, or WILD</strong></li>
+      <li>2. Tap <em>Draw a Card</em> and let the countdown build suspense</li>
+      <li>3. Follow the prompt — or take a sip 😈</li>
+      <li>4. Keep it bold, respectful, and messy in moderation</li>
+      <li>5. Shuffle categories and keep the drama going 🔁</li>
+    </ul>
+    <p style='text-align:center; margin-top: 20px;'>*Play with friends, situationships, or anyone brave enough.*</p>
+    <div style='text-align:center; margin-top: 30px;'>
+      <button onclick="document.getElementById('rulesModal').style.display='none'" style='background: hotpink; border: none; padding: 10px 20px; border-radius: 10px; color: white;'>Close</button>
+    </div>
+  </div>
+</div>
+
 </body>
+
 
 </html>
