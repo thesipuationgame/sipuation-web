@@ -1,13 +1,201 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>The Sipuation</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(-45deg, hotpink, purple, black, hotpink);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .logo {
+      max-width: 200px;
+      margin-top: 20px;
+    }
+    .card {
+      margin: 30px auto;
+      padding: 30px;
+      max-width: 90%;
+      background-color: #222;
+      border-radius: 25px;
+      font-size: 1.3em;
+      border: 4px solid hotpink;
+      box-shadow: 0 0 20px hotpink;
+      transition: transform 0.5s, opacity 0.5s;
+      opacity: 0;
+    }
+    .show {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+    button, select {
+      padding: 12px 24px;
+      margin: 10px;
+      font-size: 1em;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+    button {
+      background-color: hotpink;
+      color: white;
+    }
+    #countdown {
+      font-size: 2.5em;
+      color: gold;
+      margin-top: 10px;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+    @keyframes floatReverse {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+      100% { transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-  <h1 style="color: hotpink; text-align: center; padding-top: 2em;">The Sipuation</h1>
-  <p style="text-align: center;">Your fully upgraded Couples Edition is now ready to sip and slay.</p>
+
+<img class="logo" src="sipuation-logo.png" alt="The Sipuation Logo"/>
+<h1>The Sipuation</h1>
+<div>Select Your Deck:</div>
+
+<div style="position: fixed; top: 10px; right: 10px;">
+  <select id="deckSelect" onchange="switchDeck()" style="background-color: hotpink; color: white;">
+    <option value="BASE">🎴 Base Deck</option>
+    <option value="COUPLES">💏 Couples Edition</option>
+  </select>
+</div>
+
+<select id="category"></select>
+<br><br>
+<button onclick="startCountdown()">Draw a Card</button>
+
+<div id="countdown"></div>
+<div class="card" id="cardDisplay">Your card will appear here...</div>
+
+<div id="couplesEmoji" style="display:none;">
+  <div style="position: fixed; top: 12%; left: 8%; font-size: 2.5rem; opacity: 0.8; animation: float 6s infinite ease-in-out;">💞</div>
+  <div style="position: fixed; bottom: 15%; right: 10%; font-size: 2.3rem; opacity: 0.8; animation: floatReverse 5s infinite ease-in-out;">💋</div>
+</div>
+
+<audio id="COUPLES_SOUND" src="https://freesound.org/data/previews/518/518783_11321638-lq.mp3"></audio>
+
+<script>
+const baseDeck = {
+  SIP: ["Sip if you've ever said 'I'm on my way' while still in bed.", "Sip if you ever ghosted someone and acted like they were the problem."],
+  SIN: ["Send a flirty message to someone you shouldn't.", "Let someone read your last DM out loud."],
+  CONFESS: ["What is the biggest secret you are still hiding?", "Who is one person you lowkey do not trust?"],
+  WILD: ["Everyone vote: who is the most chaotic? That person leads the next round.", "Pick someone to swap phones with for 60 seconds."]
+};
+
+const couplesDeck = {
+  COUPLES: [
+    "Kiss your partner like it’s the first time—or sip.",
+    "What’s a fantasy you haven’t told them yet?",
+    "Let your partner scroll through your camera roll for 10 seconds.",
+    "If you had to pick one of your exes to come back, who would it be?",
+    "Trade phones for 3 minutes. Sip if you flinch.",
+    "Whisper something spicy in your partner's ear.",
+    "Rate your partner's performance out of 10—be honest.",
+    "If your partner were a song, what would their title be?",
+    "Show the last message you were scared to send.",
+    "Play your partner's favorite song and slow dance—now.",
+    "Let your partner read your most recent note or draft text.",
+    "Switch outfits (or accessories) with your partner for one round.",
+    "Take a couples selfie—but make it messy.",
+    "Who catches feelings faster? Sip if it’s you.",
+    "What’s one thing you still don’t understand about your partner?",
+    "Let your partner pick a random app and open it.",
+    "Confess something small you’ve kept from them.",
+    "Do an impression of each other.",
+    "Give a compliment you’ve never said out loud.",
+    "Take a shot if you’ve ever stalked your partner’s ex.",
+    "Tell them one thing you want more of in this relationship.",
+    "Say the pettiest thing you've done mid-argument.",
+    "Draw a heart on your partner somewhere... with lipstick.",
+    "Take turns finishing this: 'I love it when you…'",
+    "Kiss your partner's hand or foot like royalty—or sip."
+  ]
+};
+
+let cards = baseDeck;
+
+function switchDeck() {
+  const selected = document.getElementById('deckSelect').value;
+  const categorySelect = document.getElementById('category');
+  categorySelect.innerHTML = "";
+
+  if (selected === "BASE") {
+    cards = baseDeck;
+    for (let key in baseDeck) {
+      let opt = document.createElement("option");
+      opt.value = key;
+      opt.textContent = key;
+      categorySelect.appendChild(opt);
+    }
+    document.getElementById("couplesEmoji").style.display = "none";
+  } else {
+    cards = couplesDeck;
+    let opt = document.createElement("option");
+    opt.value = "COUPLES";
+    opt.textContent = "COUPLES";
+    categorySelect.appendChild(opt);
+    document.getElementById("couplesEmoji").style.display = "block";
+  }
+}
+
+function drawCard() {
+  const category = document.getElementById('category').value;
+  const selected = document.getElementById('deckSelect').value;
+  const cardArray = cards[category];
+  const card = cardArray[Math.floor(Math.random() * cardArray.length)];
+  const display = document.getElementById('cardDisplay');
+  display.style.boxShadow = selected === "COUPLES" ? "0 0 25px #b11226" : "0 0 20px hotpink";
+  display.classList.remove('show');
+  setTimeout(() => {
+    display.innerText = card;
+    display.classList.add('show');
+    if (selected === "COUPLES") {
+      document.getElementById("COUPLES_SOUND").play();
+    }
+  }, 100);
+}
+
+function startCountdown() {
+  const countdown = document.getElementById("countdown");
+  countdown.style.opacity = 1;
+  let count = 3;
+  countdown.textContent = count;
+  const interval = setInterval(() => {
+    count--;
+    if (count > 0) {
+      countdown.textContent = count;
+    } else {
+      clearInterval(interval);
+      countdown.style.opacity = 0;
+      drawCard();
+    }
+  }, 1000);
+}
+
+switchDeck(); // load default deck
+</script>
+
 </body>
 </html>
